@@ -14,6 +14,7 @@ public class CourseList {
 		this.courseList = courseList;
 
 	}
+	
 	public void showCourseNameTeacher(String nameCourse) {
 		
 		for (int index = 0; index < courseList.length; index++) {
@@ -23,20 +24,34 @@ public class CourseList {
 		}
 		System.out.println();
 	}
+	
 	public void showCourseUserSelect (String nameCourse) {
 		for(int index = 0; index < courseList.length; index++) {
 			if( courseList[index].nameCourse.equals(nameCourse) ) {
 				System.out.println("Name course: " + nameCourse);
 				System.out.print("Menter: ");
 				showCourseNameTeacher(nameCourse);
-				System.out.println();
 				System.out.println("Begin: " + courseList[index].begin);
 				System.out.println("End: " + courseList[index].end);
-				System.out.println("Fee: " + courseList[index].fee);
+				System.out.println("Fee: " + courseList[index].fee + " USD");
+				break;
 			}
 		}
 	}
-
+	
+	public Course userCourseSelect(int selectRegister, String nameCourse) {
+		if( selectRegister == 1 ) {
+			System.out.println("===========================");
+			System.out.println("You register success course");
+			System.out.println("===========================");
+			for (int index = 0; index < courseList.length; index++) {
+				if (courseList[index].nameCourse.equals(nameCourse)) {
+					return this.courseList[index];
+				}
+			}
+		}
+		return null;
+	}
 
 }
 

@@ -12,6 +12,8 @@ public class Main {
 	static final int SHOW_COURSE_MATHS = 2;
 	static final int SHOW_COURSE_LITERATURE = 3;
 	static final int SHOW_COURSE_ENGLISH = 4;
+	static final int REGISTER_COURSE = 1;
+	static final int NO_REGISETER = 2;
 
 	public static void main(String[] args) {
 
@@ -21,11 +23,11 @@ public class Main {
 		Account selectAccount = null;
 		boolean checkDueAccount = false;
 		int countErrors = 0;
+		ArrayList<Course> courseUserSelect = new ArrayList<Course>();
+		CourseUserSelect courseUserSelects = new CourseUserSelect(courseUserSelect);
 
-		
-		  CourseList courseList = new CourseList();
-		  courseList.initDataCourse();
-		 
+		CourseList courseList = new CourseList();
+		courseList.initDataCourse();
 
 		do {
 			showMain();
@@ -52,9 +54,6 @@ public class Main {
 
 					if (countErrors == 3) {
 						accountUsers.deleteAccount(selectIDAccount);
-						System.out.println("You have logged in incorrectly 3 times");
-						System.out.println("Your account has been locked");
-						System.out.println("Please create a new account again");
 						countErrors = 0;
 					}
 					break;
@@ -62,33 +61,82 @@ public class Main {
 
 				if (selectAccount != null) {
 					int selectCourse = 0;
-					do {
-					System.out.println("=============");
+					int selectRegister;
+					Course selectCourseRegister;
+					System.out.println("--------------");
 					System.out.println("WELCOME : " + selectAccount.name);
-					System.out.println("Invite you to choose our courses");
-					showCourseList();
-					selectCourse = input.nextInt();
-					
-					switch (selectCourse) {
-					case SHOW_YOUR_COURSES:
-						System.out.println("Name : " );
-						break;
-					case SHOW_COURSE_BE5:
-						courseList.showCourseUserSelect("BE5");
-						break;
-					case SHOW_COURSE_MATHS:
-						courseList.showCourseUserSelect("Maths");
-						break;
-					case SHOW_COURSE_LITERATURE:
-						courseList.showCourseUserSelect("Literature");
-						break;
-					case SHOW_COURSE_ENGLISH:
-						courseList.showCourseUserSelect("English");
-						break;
-					default:
-						System.out.println("Please choose our course only");
-					}
-					}while( selectCourse != 0);
+					do {
+						System.out.println("Invite you to choose our courses");
+
+						do {
+							showCourseList();
+							Course DuplicateCourses = null;
+							selectCourse = input.nextInt();
+							String userSelectCourse = null;
+
+							switch (selectCourse) {
+							case SHOW_YOUR_COURSES:	
+								if(courseUserSelect.size() == 0) {
+									System.out.println("You do not choose any course");
+									break;
+								}
+								String nameYourSelectCoures;
+								for (int index = 0; index < courseUserSelect.size(); index++) {
+									System.out.println("Course " + (index +1) + ": ");
+									nameYourSelectCoures = courseUserSelect.get(index).nameCourse;
+									courseList.showCourseUserSelect(nameYourSelectCoures);
+									System.out.println();
+								}
+								break;
+
+							case SHOW_COURSE_BE5:
+								userSelectCourse = "BE5";
+								break;
+
+							case SHOW_COURSE_MATHS:
+								userSelectCourse = "Maths";
+								break;
+
+							case SHOW_COURSE_LITERATURE:
+								userSelectCourse = "Literature";
+								break;
+
+							case SHOW_COURSE_ENGLISH:
+								userSelectCourse = "English";
+								break;
+
+							default:
+								System.out.println("Please choose our course only");
+								break;
+							}
+							
+							if (selectCourse == 0) {
+								System.out.println("GOOD BYE !!");
+								break;
+							}
+							if (courseUserSelect.size() > 0) {
+								DuplicateCourses = courseUserSelects.findDuplicateCourses(userSelectCourse);
+							}
+							if (DuplicateCourses != null) {
+								System.out.println("Your select duplicate courses");
+								break;
+							}
+
+							courseList.showCourseUserSelect(userSelectCourse);
+
+							showSelectCourse();
+							selectRegister = input.nextInt();
+							selectCourseRegister = courseList.userCourseSelect(selectRegister, userSelectCourse);
+
+							if (selectCourseRegister != null) {
+								courseList.showCourseUserSelect(userSelectCourse);
+								courseUserSelect.add(selectCourseRegister);
+								System.out.println();
+							}
+
+						} while (selectCourse < 0 || selectCourse > 4);
+
+					} while (selectCourse != 0);
 				}
 
 				break;
@@ -96,13 +144,9 @@ public class Main {
 
 				System.out.println("Please enter id account : ");
 				String inputIDAccount = input.nextLine();
-
-				for (int index = 0; index < accountUser.size(); index++) {
-
-					if (accountUser.get(index).idAccount.equals(inputIDAccount)) {
-						checkDueAccount = true;
-						break;
-					}
+				
+				if(accountUser.size() > 0) {
+				checkDueAccount = accountUsers.findAccountDuplicate(inputIDAccount);
 				}
 
 				if (checkDueAccount == true) {
@@ -141,14 +185,22 @@ public class Main {
 
 		System.out.println("========================");
 		System.out.println("0.Your Courses");
-		System.out.print("1.Course: BE5 - Teacher: ");
+		System.out.print("1.Course: BE5 - Menter: ");
 		courseList.showCourseNameTeacher("BE5");
-		System.out.print("2.Course: Maths - Teacher: ");
+		System.out.print("2.Course: Maths - Menter: ");
 		courseList.showCourseNameTeacher("Maths");
-		System.out.print("3.Course: Literature - Teacher: ");
+		System.out.print("3.Course: Literature - Menter: ");
 		courseList.showCourseNameTeacher("Literature");
-		System.out.print("4.Course: English - Teacher: ");
+		System.out.print("4.Course: English - Menter: ");
 		courseList.showCourseNameTeacher("English");
 		System.out.println("========================");
+	}
+
+	public static void showSelectCourse() {
+		System.out.println("=============");
+		System.out.println("1. Register");
+		System.out.println("2. No");
+		System.out.println("=============");
+
 	}
 }
