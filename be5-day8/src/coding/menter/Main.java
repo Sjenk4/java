@@ -49,6 +49,10 @@ public class Main {
 					System.out.println("0: Show my registered Courses");
 					courseService.showAllCourse();
 					userChoosesCourse = input.nextInt();
+					if(userChoosesCourse == 0) {
+						userService.showRegisterCoursesToUser(idUserInput);
+						break;
+					}
 					courseService.showCourseDetails(userChoosesCourse);
 					System.out.println("1. Register");
 					System.out.println("2. No");
@@ -63,9 +67,10 @@ public class Main {
 						
 						break;
 					case VIEW_MENTOR_DETAILS:
-							
+						courseService.showMentorByCourse(userChoosesCourse);	
 						break;
 					default:
+						System.out.println("Please choose only our selections");
 						break;
 					}
 					}while(userChoosesCourse != 0);

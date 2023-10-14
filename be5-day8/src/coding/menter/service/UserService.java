@@ -41,19 +41,25 @@ public class UserService {
 				return false;
 			}
 		}
-
+		System.out.println("Account does not exist");
 		return false;
 	}
 
-	public void showRegisterCoursesToUser(User user, int userChoosesCourse) {
-		ArrayList<Course> registeredCourses = new  ArrayList<Course>();
-		for (int i = 0; i < Database.COURSES_DB.size(); i++) {
-			if(userChoosesCourse ==  Database.COURSES_DB.get(i).getId()) {
-				for (int j = 0; j < Database.USERS_DB.size(); j++) {
-					if(Database.USERS_DB.get(j).getId().equals(user)) {
-						registeredCourses.add(Database.COURSES_DB.get(j));
-						break;
-					}
+	public void showRegisterCoursesToUser(String idUser) {
+		for (User user : Database.USERS_DB) {
+			if(user.getRegisteredCourses() == null) {
+				System.out.println("You have not registered for any courses yet");
+				break;
+			}
+			if(user.getId().equals(idUser)) {
+				for (int i = 0; i < user.getRegisteredCourses().size(); i++) {
+					System.out.println("==============================================");
+					System.out.println("Name course: " + user.getRegisteredCourses().get(i).getName());
+					System.out.println("Mentor: " + user.getRegisteredCourses().get(i).getTeachingMentors().get(i).getName());
+					System.out.println("Begin: " + user.getRegisteredCourses().get(i).getBegin());
+					System.out.println("End: " + user.getRegisteredCourses().get(i).getEnd());
+					System.out.println("Fee: " + user.getRegisteredCourses().get(i).getFee());
+					System.out.println("==============================================");
 				}
 			}
 		}
@@ -61,11 +67,12 @@ public class UserService {
 
 	public void registerNewCourse(int idCourse, String idUser) {
 		ArrayList<Course> registeredCourses = new  ArrayList<Course>();
-		for (int i = 0; i < Database.COURSES_DB.size(); i++) {
-			if(idCourse ==  Database.COURSES_DB.get(i).getId()) {
-				for (int j = 0; j < Database.USERS_DB.size(); j++) {
-					if(Database.USERS_DB.get(j).getId().equals(idUser)) {
-						registeredCourses.add(Database.COURSES_DB.get(j));
+		for (int first = 0; first < Database.COURSES_DB.size(); first++) {
+			if(idCourse ==  Database.COURSES_DB.get(first).getId()) {
+				for (int second = 0; second < Database.USERS_DB.size(); second++) {
+					if(Database.USERS_DB.get(second).getId().equals(idUser)) {
+						registeredCourses.add(Database.COURSES_DB.get(first));
+						Database.USERS_DB.get(second).setRegisteredCourses(registeredCourses);
 						break;
 					}
 				}
