@@ -1,6 +1,9 @@
 package coding.menter.service;
 
+import java.util.ArrayList;
+
 import coding.menter.data.Course;
+import coding.menter.data.Menter;
 import coding.menter.data.User;
 import coding.menter.db.Database;
 
@@ -61,9 +64,11 @@ public class UserService {
 	}
 
 	public void registerNewCourse(int idCourse, User user) {
+		ArrayList<Course> registeredCourses = new ArrayList<Course>();
 		for (int i = 0; i < Database.COURSES_DB.size(); i++) {
-			if (Database.COURSES_DB.get(i).equals(idCourse)) {
-				user.getRegisteredCourses().add(Database.COURSES_DB.get(i));
+			if (Database.COURSES_DB.get(i).getId() == idCourse) {
+				registeredCourses.add(Database.COURSES_DB.get(i));
+				user.setRegisteredCourses(registeredCourses);
 			}
 		}
 	}
