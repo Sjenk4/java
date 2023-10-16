@@ -1,7 +1,6 @@
 package coding.menter.service;
 
 
-import coding.menter.data.Course;
 import coding.menter.data.Menter;
 import coding.menter.db.Database;
 
@@ -23,8 +22,8 @@ public class CourseService {
 				System.out.println("-------------------------");
 				System.out.println("Name: " + Database.COURSES_DB.get(i).getName());
 				for (Menter mentor : Database.COURSES_DB.get(i).getTeachingMentors()) {
-				System.out.print("Metor: " + mentor.getName());
-				System.out.print(" ");
+					System.out.print("Metor: " + mentor.getName());
+					System.out.print(" ");
 				}
 				System.out.println();
 				System.out.println("Begin: " + Database.COURSES_DB.get(i).getBegin());
@@ -38,16 +37,19 @@ public class CourseService {
 
 	public void showMentorByCourse(int idCourse) {
 		for (int i = 0; i < Database.COURSES_DB.size(); i++) {
-			if(Database.COURSES_DB.get(i).getId() == idCourse) {
-				for (int second = 0; second < Database.COURSES_DB.get(i).getTeachingMentors().size(); second ++) {
+			if (Database.COURSES_DB.get(i).getId() == idCourse) {
+				for (int second = 0; second < Database.COURSES_DB.get(i).getTeachingMentors().size(); second++) {
 					System.out.println("-------------------------");
-					System.out.println("Name Mentor:" + Database.COURSES_DB.get(i).getTeachingMentors().get(second).getName());
-					System.out.println("Email Mentor:" + Database.COURSES_DB.get(i).getTeachingMentors().get(second).getEmail());
-					System.out.println("Phone Mentor:" + Database.COURSES_DB.get(i).getTeachingMentors().get(second).getPhone());
+					System.out.println(
+							"Name Mentor:" + Database.COURSES_DB.get(i).getTeachingMentors().get(second).getName());
+					System.out.println(
+							"Email Mentor:" + Database.COURSES_DB.get(i).getTeachingMentors().get(second).getEmail());
+					System.out.println(
+							"Phone Mentor:" + Database.COURSES_DB.get(i).getTeachingMentors().get(second).getPhone());
 					System.out.println("-------------------------");
 				}
 			}
-		}		
+		}
 	}
 
 }

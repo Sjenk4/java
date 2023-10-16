@@ -1,7 +1,5 @@
 package coding.menter.service;
 
-import java.util.ArrayList;
-
 import coding.menter.data.Course;
 import coding.menter.data.User;
 import coding.menter.db.Database;
@@ -23,59 +21,49 @@ public class UserService {
 		}
 	}
 
-	public boolean login(String id, String password) {
+	public User login(String id, String password) {
 		for (int i = 0; i < Database.USERS_DB.size(); i++) {
-			if (Database.USERS_DB.get(i).getId().equals(id) && Database.USERS_DB.get(i).getPassword().equals(password)) {
-				return true;
+			if (Database.USERS_DB.get(i).getId().equals(id)
+					&& Database.USERS_DB.get(i).getPassword().equals(password)) {
+				return Database.USERS_DB.get(i);
 			}
-		}
-		for (int i = 0; i < Database.USERS_DB.size(); i++) {
 			if (Database.USERS_DB.get(i).getId().equals(id) && Database.USERS_DB.get(i).getFailedCount() == 3) {
 				System.out.println("Your account has been locked");
-				return false;
+				return null;
 			}
 			if (Database.USERS_DB.get(i).getId().equals(id)) {
 				int getFailedCount = Database.USERS_DB.get(i).getFailedCount() + 1;
 				Database.USERS_DB.get(i).setFailedCount(getFailedCount);
 				System.out.println("Id or password is wrong");
-				return false;
+				return null;
 			}
 		}
 		System.out.println("Account does not exist");
-		return false;
+		return null;
 	}
 
-	public void showRegisterCoursesToUser(String idUser) {
-		for (User user : Database.USERS_DB) {
-			if(user.getRegisteredCourses() == null) {
-				System.out.println("You have not registered for any courses yet");
-				break;
-			}
-			if(user.getId().equals(idUser)) {
-				for (int i = 0; i < user.getRegisteredCourses().size(); i++) {
-					System.out.println("==============================================");
-					System.out.println("Name course: " + user.getRegisteredCourses().get(i).getName());
-					System.out.println("Mentor: " + user.getRegisteredCourses().get(i).getTeachingMentors().get(i).getName());
-					System.out.println("Begin: " + user.getRegisteredCourses().get(i).getBegin());
-					System.out.println("End: " + user.getRegisteredCourses().get(i).getEnd());
-					System.out.println("Fee: " + user.getRegisteredCourses().get(i).getFee());
-					System.out.println("==============================================");
-				}
+	public void showRegisterCoursesToUser(User user) {
+		if (user.getRegisteredCourses() == null) {
+			System.out.println("You have not registered for any courses yet");
+		}
+		if (user.getRegisteredCourses() != null) {
+			for (int i = 0; i < user.getRegisteredCourses().size(); i++) {
+				System.out.println("==============================================");
+				System.out.println("Name course: " + user.getRegisteredCourses().get(i).getName());
+				System.out
+						.println("Mentor: " + user.getRegisteredCourses().get(i).getTeachingMentors().get(i).getName());
+				System.out.println("Begin: " + user.getRegisteredCourses().get(i).getBegin());
+				System.out.println("End: " + user.getRegisteredCourses().get(i).getEnd());
+				System.out.println("Fee: " + user.getRegisteredCourses().get(i).getFee());
+				System.out.println("==============================================");
 			}
 		}
 	}
 
-	public void registerNewCourse(int idCourse, String idUser) {
-		ArrayList<Course> registeredCourses = new  ArrayList<Course>();
-		for (int first = 0; first < Database.COURSES_DB.size(); first++) {
-			if(idCourse ==  Database.COURSES_DB.get(first).getId()) {
-				for (int second = 0; second < Database.USERS_DB.size(); second++) {
-					if(Database.USERS_DB.get(second).getId().equals(idUser)) {
-						registeredCourses.add(Database.COURSES_DB.get(first));
-						Database.USERS_DB.get(second).setRegisteredCourses(registeredCourses);
-						break;
-					}
-				}
+	public void registerNewCourse(int idCourse, User user) {
+		for (int i = 0; i < Database.COURSES_DB.size(); i++) {
+			if (Database.COURSES_DB.get(i).equals(idCourse)) {
+				user.getRegisteredCourses().add(Database.COURSES_DB.get(i));
 			}
 		}
 	}

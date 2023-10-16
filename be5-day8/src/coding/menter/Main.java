@@ -21,7 +21,7 @@ public class Main {
 		Database.initDB();
 		Scanner input = new Scanner(System.in);
 
-		boolean idUserSelect = false;
+		User idUserLogin = null;
 		do {
 			System.out.println("-----------");
 			System.out.println("1.Login");
@@ -35,46 +35,25 @@ public class Main {
 				String idUserInput = input.nextLine();
 				System.out.println("your password");
 				String passUserUnput = input.nextLine();
-				idUserSelect = userService.login(idUserInput, passUserUnput);
+				idUserLogin = userService.login(idUserInput, passUserUnput);
 
-				if (idUserSelect == true) {
-					for (User user : Database.USERS_DB) {
-						if (user.getId().equals(idUserInput)) {
-							System.out.println("Hello " + user.getName());
-							break;
-						}
-					}
+				if (idUserLogin != null) {
+					System.out.println("Hello " + idUserLogin.getName());
 					int userChoosesCourse = 0;
 					do {
-					System.out.println("0: Show my registered Courses");
-					courseService.showAllCourse();
-					userChoosesCourse = input.nextInt();
-					if(userChoosesCourse == 0) {
-						userService.showRegisterCoursesToUser(idUserInput);
-						break;
-					}
-					courseService.showCourseDetails(userChoosesCourse);
-					System.out.println("1. Register");
-					System.out.println("2. No");
-					System.out.println("3. ViewMentorDetails");
-					int userInput = input.nextInt();
-					switch (userInput) {
-					case REGISTER_COURSE:
-						userService.registerNewCourse(userChoosesCourse,idUserInput );
-						System.out.println("You reguseter success course all info");
-						break;
-					case NO_REGISTER:
-						
-						break;
-					case VIEW_MENTOR_DETAILS:
-						courseService.showMentorByCourse(userChoosesCourse);	
-						break;
-					default:
-						System.out.println("Please choose only our selections");
-						break;
-					}
-					}while(userChoosesCourse != 0);
-					
+						showAllCoursesAndUserRegisteredCourses();
+						userChoosesCourse = input.nextInt();
+						if (userChoosesCourse == 0) {
+							userService.showRegisterCoursesToUser(idUserLogin);
+							break;
+						}
+						courseService.showCourseDetails(userChoosesCourse);
+						System.out.println("1. Register");
+						System.out.println("2. No");
+						System.out.println("3. ViewMentorDetails");
+						int userInput = input.nextInt();
+						doRegisterCourseAndShowMentorByCourse(userInput, userChoosesCourse, idUserLogin);
+					} while (userChoosesCourse != 0);
 				}
 				break;
 			case REGISTER_ACCOUNT:
@@ -92,8 +71,33 @@ public class Main {
 				System.out.println("Please choose only 1 or 2");
 				break;
 			}
-		} while (idUserSelect == false);
+		} while (idUserLogin == null);
 
 	}
 
+	public static void doRegisterCourseAndShowMentorByCourse(int userInput, int userChoosesCourse, User idUserLogin) {
+		CourseService courseService = new CourseService();
+		UserService userService = new UserService();
+		switch (userInput) {
+		case REGISTER_COURSE:
+			userService.registerNewCourse(userChoosesCourse, idUserLogin);
+			System.out.println("You reguseter success course all info");
+			break;
+		case NO_REGISTER:
+
+			break;
+		case VIEW_MENTOR_DETAILS:
+			courseService.showMentorByCourse(userChoosesCourse);
+			break;
+		default:
+			System.out.println("Please choose only our selections");
+			break;
+		}
+	}
+
+	public static void showAllCoursesAndUserRegisteredCourses() {
+		CourseService courseService = new CourseService();
+		System.out.println("0: Show my registered Courses");
+		courseService.showAllCourse();
+	}
 }
