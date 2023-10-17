@@ -36,25 +36,7 @@ public class Main {
 				System.out.println("your password");
 				String passUserUnput = input.nextLine();
 				idUserLogin = userService.login(idUserInput, passUserUnput);
-
-				if (idUserLogin != null) {
-					System.out.println("Hello " + idUserLogin.getName());
-					int userChoosesCourse = 0;
-					do {
-						showAllCoursesAndUserRegisteredCourses();
-						userChoosesCourse = input.nextInt();
-						if (userChoosesCourse == 0) {
-							userService.showRegisterCoursesToUser(idUserLogin);
-							break;
-						}
-						courseService.showCourseDetails(userChoosesCourse);
-						System.out.println("1. Register");
-						System.out.println("2. No");
-						System.out.println("3. ViewMentorDetails");
-						int userInput = input.nextInt();
-						doRegisterCourseAndShowMentorByCourse(userInput, userChoosesCourse, idUserLogin);
-					} while (userChoosesCourse != 0);
-				}
+				doLoginAndDoRegisterCourse(idUserLogin);
 				break;
 			case REGISTER_ACCOUNT:
 				System.out.println("input id");
@@ -99,5 +81,30 @@ public class Main {
 		CourseService courseService = new CourseService();
 		System.out.println("0: Show my registered Courses");
 		courseService.showAllCourse();
+	}
+	
+	public static void doLoginAndDoRegisterCourse(User idUserLogin) {
+		CourseService courseService = new CourseService();
+		UserService userService = new UserService();
+		Scanner input = new Scanner(System.in);
+		
+		if (idUserLogin != null) {
+			System.out.println("Hello " + idUserLogin.getName());
+			int userChoosesCourse = 0;
+			do {
+				showAllCoursesAndUserRegisteredCourses();
+				userChoosesCourse = input.nextInt();
+				if (userChoosesCourse == 0) {
+					userService.showRegisterCoursesToUser(idUserLogin);
+					break;
+				}
+				courseService.showCourseDetails(userChoosesCourse);
+				System.out.println("1. Register");
+				System.out.println("2. No");
+				System.out.println("3. ViewMentorDetails");
+				int userInput = input.nextInt();
+				doRegisterCourseAndShowMentorByCourse(userInput, userChoosesCourse, idUserLogin);
+			} while (userChoosesCourse != 0);
+		}
 	}
 }
