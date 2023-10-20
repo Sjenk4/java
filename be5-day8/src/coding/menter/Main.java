@@ -45,8 +45,8 @@ public class Main {
 				String pass = input.nextLine();
 				System.out.println("input name");
 				String name = input.nextLine();
-
-				userService.registerNewUser(id, pass, name);
+				User user = new User(id, pass, name);
+				userService.registerNewUser(user);
 				break;
 
 			default:

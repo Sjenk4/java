@@ -9,17 +9,17 @@ import coding.menter.db.Database;
 
 public class UserService {
 
-	public void registerNewUser(String id, String password, String name) {
-		User user = new User(id, password, name);
+	public void registerNewUser(User user) {
+		User users = new User();
 		int i;
 		for (i = 0; i < Database.USERS_DB.size(); i++) {
-			if (Database.USERS_DB.get(i).getId().equals(id)) {
+			if (Database.USERS_DB.get(i).getId().equals(user.getId())) {
 				System.out.println("User is exists");
 				break;
 			}
 		}
 		if (i == Database.USERS_DB.size()) {
-			Database.USERS_DB.add(user);
+			Database.USERS_DB.add(users);
 			System.out.println("Register successfully");
 		}
 	}
