@@ -11,7 +11,7 @@ public class FindTheNumberAppearOddTimes {
 
 	public static void findNonRepeatingElement(int nums[]) {
 		Arrays.sort(nums);
-
+		//Onlogn
 		if (nums[0] != nums[1])
 			System.out.println(nums[0]);
 

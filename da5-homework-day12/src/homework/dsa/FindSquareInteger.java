@@ -19,11 +19,14 @@ public class FindSquareInteger {
 	
 	public static void findSquareInteger(int startNumber, int endNumber) {
 		int result = startNumber;
+		int loopTime = 0;
 		while( result  < endNumber) {
-			System.out.println(result );
+			System.out.print(result + " " );
 			startNumber++;
 			result = startNumber * startNumber;
+			loopTime++;
 		}
 		
+		System.out.println("loopTime :" + loopTime);
 	}
 }
